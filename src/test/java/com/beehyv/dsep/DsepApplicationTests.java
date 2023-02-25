@@ -1,10 +1,10 @@
-package com.beehyv.dsepcourses;
+package com.beehyv.dsep;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DsepcoursesApplicationTests {
+class DsepApplicationTests {
 
 	@Test
 	void contextLoads() {

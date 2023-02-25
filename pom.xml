@@ -9,10 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.beehyv</groupId>
-	<artifactId>dsepcourses</artifactId>
+	<artifactId>dsep</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<name>dsepcourses</name>
+	<name>dsep</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -25,42 +24,10 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-    <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-jpa</artifactId>
-        <version>2.7.8</version>
-    </dependency>
-	<dependency>
-    <groupId>org.openapitools</groupId>
-    <artifactId>jackson-databind-nullable</artifactId>
-    <version>0.2.1</version>
-</dependency>
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger2</artifactId>
-    <version>2.9.2</version>
-</dependency>
-<dependency>
-    <groupId>org.openapitools</groupId>
-    <artifactId>jackson-databind-nullable</artifactId>
-    <version>0.2.1</version>
-</dependency>
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger2</artifactId>
-    <version>2.9.2</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
-<dependency>
+		<dependency>
     <groupId>javax.validation</groupId>
     <artifactId>validation-api</artifactId>
     <version>2.0.1.Final</version>
@@ -71,7 +38,11 @@
     <artifactId>swagger-annotations</artifactId>
     <version>2.2.8</version>
 </dependency>
-
+<dependency>
+    <groupId>org.openapitools</groupId>
+    <artifactId>jackson-databind-nullable</artifactId>
+    <version>0.2.1</version>
+</dependency>
 
 	</dependencies>
 
@@ -81,33 +52,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!--<plugin>
-    <groupId>org.openapitools</groupId>
-    <artifactId>openapi-generator-maven-plugin</artifactId>
-    <version>6.2.0</version>
-    <executions>
-        <execution>
-            <goals>
-                <goal>generate</goal>
-            </goals>
-            <configuration>
-                <inputSpec>
-                    ${project.basedir}/src/main/resources/dsep.yaml
-                </inputSpec>
-                <generatorName>spring</generatorName>
-                <apiPackage>com.beehyv.dsep.api</apiPackage>
-                <modelPackage>com.beehyv.dsep.model</modelPackage>
-                <supportingFilesToGenerate>
-                    ApiUtil.java
-                </supportingFilesToGenerate>
-                <configOptions>
-                    <delegatePattern>true</delegatePattern>
-					<validateSpec>false</validateSpec>
-                </configOptions>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>-->
 		</plugins>
 	</build>
 

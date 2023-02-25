@@ -1,7 +1,14 @@
 package com.beehyv.dsep.api;
 
+import com.beehyv.dsep.model.Ack;
+import com.beehyv.dsep.model.Error;
 import com.beehyv.dsep.model.SearchPost200Response;
+import com.beehyv.dsep.model.SearchPost200ResponseMessage;
 import com.beehyv.dsep.model.SelectPostRequest;
+import com.beehyv.dsep.model.Ack.StatusEnum;
+
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,16 +40,27 @@ public interface InitApiDelegate {
      * @see InitApi#initPost
      */
     default ResponseEntity<SearchPost200Response> initPost(SelectPostRequest selectPostRequest) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+        SearchPost200Response resp = new SearchPost200Response();
+        SearchPost200ResponseMessage msg = new SearchPost200ResponseMessage();
+        Ack ack = new Ack();
+        ack.setStatus(StatusEnum.ACK);
+        msg.setAck(ack);
+        Error err = new Error();
+        err.setMessage("No error");
+        resp.setError(err);
+        resp.setMessage(msg);
+        return ResponseEntity.ok(resp);
+        // getRequest().ifPresent(request -> {
+        //     for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+        //         if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+        //             String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
+        //             ApiUtil.setExampleResponse(request, "application/json", exampleString);
+        //             break;
+        //         }
+        //     }
+        // });
+        // return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 
