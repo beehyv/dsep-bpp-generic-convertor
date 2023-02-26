@@ -2,6 +2,8 @@ package com.beehyv.dsep.api;
 
 import com.beehyv.dsep.model.OnTrackPostRequest;
 import com.beehyv.dsep.model.SearchPost200Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-02-25T15:22:03.145011300+05:30[Asia/Calcutta]")
 public interface OnTrackApiDelegate {
 
+    public static final Logger LOGGER = LogManager.getLogger(OnStatusApiDelegate.class.getName());
+
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
@@ -33,6 +37,7 @@ public interface OnTrackApiDelegate {
      * @see OnTrackApi#onTrackPost
      */
     default ResponseEntity<SearchPost200Response> onTrackPost(OnTrackPostRequest onTrackPostRequest) {
+        LOGGER.info("Recieved on track request");
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
