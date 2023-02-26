@@ -41,6 +41,7 @@ public interface SearchApiDelegate {
         Ack ack  = new Ack();
         ack.setStatus(Ack.StatusEnum.ACK);
         msg.setAck(ack);
+        msg = SyncJobs.getAllJobs(msg);
         resp.setMessage(msg);
         return ResponseEntity.ok(resp);
 
