@@ -33,6 +33,7 @@ public interface OnSelectApiDelegate {
      * @see OnSelectApi#onSelectPost
      */
     default ResponseEntity<SearchPost200Response> onSelectPost(OnSelectPostRequest onSelectPostRequest) {
+        System.out.println("Recieved on select request");
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
