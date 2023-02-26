@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 public class PostApi {
 
     public static String post(String requestBody, String bap_uri ) throws IOException {
-            // Create URL object
             URL url = new URL(bap_uri);
 
             // Open connection

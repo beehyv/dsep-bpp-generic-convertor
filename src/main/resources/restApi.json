@@ -5,7 +5,7 @@
   "attributes" : [
     {
       "becknField": "items",
-      "apiField": "courses",
+      "apiField": "jobs",
       "type": "array",
       "children": [
         {
