@@ -56,15 +56,17 @@ public interface InitApiDelegate {
     default ResponseEntity<SearchPost200Response> initPost(SelectPostRequest selectPostRequest) {
         SearchPost200Response resp = new SearchPost200Response();
         SearchPost200ResponseMessage msg  = new SearchPost200ResponseMessage();
-        try {
-            PostApi.post(createPostRequest(selectPostRequest.getContext(), selectPostRequest.getMessage().getOrder()), selectPostRequest.getContext().getBapUri().toString());
-        } catch (Exception e) {
-            Ack ack  = new Ack();
-            ack.setStatus(Ack.StatusEnum.NACK);
-            msg.setAck(ack);
-            resp.setMessage(msg);
-            return  ResponseEntity.ok(resp);
+        class Async  implements Runnable {
+            @Override
+            public void run() {
+                try {
+                    PostApi.post(createPostRequest(selectPostRequest.getContext(), selectPostRequest.getMessage().getOrder()), selectPostRequest.getContext().getBapUri().toString());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            };
         }
+        Async async = new Async();
         Ack ack  = new Ack();
         ack.setStatus(Ack.StatusEnum.ACK);
         msg.setAck(ack);

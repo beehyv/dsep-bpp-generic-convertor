@@ -1,7 +1,10 @@
 package com.beehyv.dsep.util;
 
 import com.beehyv.dsep.model.Ack;
+import com.beehyv.dsep.model.Catalog;
+import com.beehyv.dsep.model.Descriptor;
 import com.beehyv.dsep.model.Error;
+import com.beehyv.dsep.model.Item;
 import com.beehyv.dsep.model.SearchPost200Response;
 import com.beehyv.dsep.model.SearchPost200ResponseMessage;
 import org.apache.commons.io.IOUtils;
@@ -15,8 +18,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -70,74 +75,77 @@ public class SyncJobs {
         return attributesMap;
     }
 
-    public static JSONObject addCatalogDescriptor(JSONObject message, String descriptor_name) {
-        message.append("catalog", createDescriptor(descriptor_name));
-        return message;
+    public static Catalog addCatalogDescriptor(SearchPost200ResponseMessage msg, String descriptor_name) {
+        Catalog catalog = new Catalog();
+        catalog.setDescriptor(createDescriptor(descriptor_name));
+        msg.setCatalog(catalog);
+        return catalog;
     }
 
 
 
-    private static JSONObject createDescriptor(JSONObject descriptor, String descriptor_name) {
-        JSONObject name = new JSONObject();
-        name.put("name", descriptor_name);
-        descriptor.put("descriptor", name);
+    private static Descriptor createDescriptor(String descriptor_name) {
+        Descriptor descriptor = new Descriptor();
+        descriptor.setName(descriptor_name);
         return descriptor;
     }
 
-    private static JSONObject createDescriptor(String descriptor_name) {
-        JSONObject descriptor = new JSONObject();
-        JSONObject name = new JSONObject();
-        name.put("name", descriptor_name);
-        descriptor.put("descriptor", name);
-        return descriptor;
-    }
 
-    private static void fetchAllParams(JSONObject message, RestApi restApi, String result, String type) {
+    private static void fetchAllParams(SearchPost200ResponseMessage msg, RestApi restApi, String result) {
         JSONObject resultant = new JSONObject(result);
         for (String originalAttribute : restApi.getAttributes().keySet()) {
             Attribute attribute = restApi.getAttributes().get(originalAttribute);
-            if (attribute.getType().equals("array") && originalAttribute.equals(type)) {
-                message.put(originalAttribute, createChildren(attribute, resultant));
+            if (attribute.getType().equals("array") && originalAttribute.equals("items")) {
+                List<Item> itemList = new ArrayList<>();
+                itemList.addAll(createChildren(attribute, resultant));
+                msg.setItems(itemList);
             }
         }
     }
 
 
-    private static JSONArray createChildren(Attribute attribute, JSONObject resultant) {
-        JSONArray output = new JSONArray();
+    private static List<Item> createChildren(Attribute attribute, JSONObject resultant) {
+        List<Item> items = new ArrayList<>();
         JSONArray childrenArray = (JSONArray) resultant.get(attribute.getField());
         for (Object child : childrenArray) {
-            JSONObject arrayItem = new JSONObject();
+            Item item = new Item();
             for (String key : attribute.getChildren().keySet()) {
                 if (key.contains(".")) {
-                    JSONObject part2 = new JSONObject();
-                    part2.put(key.split("\\.")[1], ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
-                    arrayItem.put(key.split("\\.")[0], part2);
+                    if(key.split("\\.")[0] == "descriptor" && key.split("\\.")[1] == "name") {
+                        Descriptor descriptor = new Descriptor();
+                        descriptor.setName((String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                    }
                 } else {
-                    arrayItem.put(key, ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                    switch (key) {
+                        case "id" : item.setId( (String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                             break;
+                        case "parent_item_id" : item.setParentItemId( (String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                            break;
+                        case "category_id" : item.setCategoryId( (String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                            break;
+                    }
+
                 }
             }
-            output.put(arrayItem);
+            items.add(item);
         }
-        return output;
+        return items;
     }
 
-    public static String getAllJobs()  {
+    public static SearchPost200ResponseMessage getAllJobs(SearchPost200ResponseMessage msg)  {
         JSONObject output = new JSONObject();
         try {
             RestApi restApi = readRestApiJson("/restApi.json");
             String result = getRecords(restApi.getUrl(), restApi.getMethod());
-            JSONObject message = new JSONObject();
-            addCatalogDescriptor(message, restApi.getCatalogDescriptor());
-            fetchAllParams(message, restApi, result, "items");
-            output.put("message", message);
-            output.put("message", " { \"ack\" : { \"status\" : \"ACK\" }");
+            addCatalogDescriptor(msg, restApi.getCatalogDescriptor());
+            fetchAllParams(msg, restApi, result);
+
         }catch (IOException e) {
           Error error = new Error();
           error.setMessage(e.getMessage());
         }
 
-        return output.toString();
+        return msg;
     }
 
 

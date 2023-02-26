@@ -1,6 +1,8 @@
 package com.beehyv.dsep.api;
 
+import com.beehyv.dsep.model.Ack;
 import com.beehyv.dsep.model.SearchPost200Response;
+import com.beehyv.dsep.model.SearchPost200ResponseMessage;
 import com.beehyv.dsep.model.SearchPostRequest;
 import com.beehyv.dsep.util.SyncJobs;
 import org.springframework.http.HttpStatus;
@@ -34,15 +36,13 @@ public interface SearchApiDelegate {
      * @see SearchApi#searchPost
      */
     default ResponseEntity<SearchPost200Response> searchPost(SearchPostRequest searchPostRequest) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    ApiUtil.setExampleResponse(request, "application/json", SyncJobs.getAllJobs());
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.OK);
+        SearchPost200Response resp = new SearchPost200Response();
+        SearchPost200ResponseMessage msg  = new SearchPost200ResponseMessage();
+        Ack ack  = new Ack();
+        ack.setStatus(Ack.StatusEnum.ACK);
+        msg.setAck(ack);
+        resp.setMessage(msg);
+        return ResponseEntity.ok(resp);
 
     }
 
