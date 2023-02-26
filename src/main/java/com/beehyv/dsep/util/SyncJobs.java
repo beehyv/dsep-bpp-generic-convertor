@@ -41,6 +41,7 @@ public class SyncJobs {
             response.append(inputLine);
         }
         in.close();
+        System.out.println("Output of Post Request" +response.toString());
 
         return response.toString();
     }
@@ -134,7 +135,6 @@ public class SyncJobs {
     }
 
     public static SearchPost200ResponseMessage getAllJobs(SearchPost200ResponseMessage msg)  {
-        JSONObject output = new JSONObject();
         try {
             RestApi restApi = readRestApiJson("/restApi.json");
             String result = getRecords(restApi.getUrl(), restApi.getMethod());
@@ -145,7 +145,6 @@ public class SyncJobs {
           Error error = new Error();
           error.setMessage(e.getMessage());
         }
-
         return msg;
     }
 
