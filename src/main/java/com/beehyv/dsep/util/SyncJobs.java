@@ -117,11 +117,11 @@ public class SyncJobs {
                     }
                 } else {
                     switch (key) {
-                        case "id" : item.setId( (String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                        case "id" : item.setId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
                              break;
-                        case "parent_item_id" : item.setParentItemId( (String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                        case "parent_item_id" : item.setParentItemId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
                             break;
-                        case "category_id" : item.setCategoryId( (String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                        case "category_id" : item.setCategoryId( String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
                             break;
                     }
 
