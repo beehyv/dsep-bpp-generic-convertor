@@ -54,6 +54,7 @@ public interface ConfirmApiDelegate {
     default ResponseEntity<SearchPost200Response> confirmPost(SelectPostRequest selectPostRequest) {
         SearchPost200Response resp = new SearchPost200Response();
         SearchPost200ResponseMessage msg  = new SearchPost200ResponseMessage();
+        //TODO this will be done through Kafka
         class Async  implements Runnable {
             @Override
             public void run() {
@@ -65,6 +66,7 @@ public interface ConfirmApiDelegate {
             };
         }
         Async async = new Async();
+        async.run();
         Ack ack  = new Ack();
         ack.setStatus(Ack.StatusEnum.ACK);
         msg.setAck(ack);
