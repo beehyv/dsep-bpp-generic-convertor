@@ -27,6 +27,19 @@ public class SearchPost200ResponseMessage {
   @JsonProperty("ack")
   private Ack ack;
 
+  @JsonProperty("catalog")
+  private Catalog catalog;
+
+  @JsonProperty("items")
+  private List<Item> items;
+
+  @JsonProperty("fulfillment")
+  private Fulfillment fulfillment;
+
+  @JsonProperty("confirmation")
+  private String confirmation;
+
+
   public SearchPost200ResponseMessage ack(Ack ack) {
     this.ack = ack;
     return this;
@@ -44,6 +57,43 @@ public class SearchPost200ResponseMessage {
 
   public void setAck(Ack ack) {
     this.ack = ack;
+  }
+
+
+  @Schema(name = "catalog", required = true)
+  public Catalog getCatalog() {
+    return catalog;
+  }
+
+  public void setCatalog(Catalog catalog) {
+    this.catalog = catalog;
+  }
+
+  @Schema(name="item")
+  public List<Item> getItems() {
+    return items;
+  }
+
+
+  @Schema(name="fulfillment")
+  public Fulfillment getFulfillment() {
+    return fulfillment;
+  }
+
+  public void setFulfillment(Fulfillment fulfillment) {
+    this.fulfillment = fulfillment;
+  }
+
+  public void setItems(List<Item> items) {
+    this.items = items;
+  }
+
+  public String getConfirmation() {
+    return confirmation;
+  }
+
+  public void setConfirmation(String confirmation) {
+    this.confirmation = confirmation;
   }
 
   @Override

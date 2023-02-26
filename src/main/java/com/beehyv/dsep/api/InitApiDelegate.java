@@ -1,7 +1,11 @@
 package com.beehyv.dsep.api;
 
 import com.beehyv.dsep.model.Ack;
+import com.beehyv.dsep.model.Catalog;
+import com.beehyv.dsep.model.Category;
+import com.beehyv.dsep.model.Descriptor;
 import com.beehyv.dsep.model.Error;
+import com.beehyv.dsep.model.Item;
 import com.beehyv.dsep.model.SearchPost200Response;
 import com.beehyv.dsep.model.SearchPost200ResponseMessage;
 import com.beehyv.dsep.model.SelectPostRequest;
@@ -42,25 +46,29 @@ public interface InitApiDelegate {
     default ResponseEntity<SearchPost200Response> initPost(SelectPostRequest selectPostRequest) {
 
         SearchPost200Response resp = new SearchPost200Response();
-        SearchPost200ResponseMessage msg = new SearchPost200ResponseMessage();
-        Ack ack = new Ack();
-        ack.setStatus(StatusEnum.ACK);
+        SearchPost200ResponseMessage msg  = new SearchPost200ResponseMessage();
+        Catalog catalog = new Catalog();
+        Category category = new Category();
+        Descriptor categoryDescriptor = new Descriptor();
+        categoryDescriptor.setName("Recruitment 2022");
+        categoryDescriptor.setLongDesc("For Recruitment of 2022");
+        category.setDescriptor(categoryDescriptor);
+        Descriptor descriptor = new Descriptor();
+        descriptor.setName("Catalog for Beehyv Training Courses");
+        catalog.setDescriptor(descriptor);
+        msg.setCatalog(catalog);
+        Item item = new Item();
+        item.setCategoryId("3");
+        item.id("90");
+        Descriptor itemDescriptor = new Descriptor();
+        descriptor.setName("US Placement Test");
+        descriptor.setLongDesc("This course is to train user for US placements");
+        item.setDescriptor(descriptor);
+        Ack ack  = new Ack();
+        ack.setStatus(Ack.StatusEnum.ACK);
         msg.setAck(ack);
-        Error err = new Error();
-        err.setMessage("No error");
-        resp.setError(err);
         resp.setMessage(msg);
-        return ResponseEntity.ok(resp);
-        // getRequest().ifPresent(request -> {
-        //     for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-        //         if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-        //             String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
-        //             ApiUtil.setExampleResponse(request, "application/json", exampleString);
-        //             break;
-        //         }
-        //     }
-        // });
-        // return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return  ResponseEntity.ok(resp);
 
     }
 
