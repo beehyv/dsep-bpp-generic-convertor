@@ -44,7 +44,6 @@ public interface SearchApiDelegate {
         msg = SyncJobs.getAllJobs(msg);
         resp.setMessage(msg);
         return ResponseEntity.ok(resp);
-
     }
 
 }
