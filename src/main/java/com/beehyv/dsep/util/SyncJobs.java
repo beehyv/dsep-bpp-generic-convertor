@@ -114,6 +114,7 @@ public class SyncJobs {
                     if(key.split("\\.")[0] == "descriptor" && key.split("\\.")[1] == "name") {
                         Descriptor descriptor = new Descriptor();
                         descriptor.setName((String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
+                        item.setDescriptor(descriptor);
                     }
                 } else {
                     switch (key) {
