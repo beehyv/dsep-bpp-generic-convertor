@@ -116,7 +116,7 @@ public class SyncJobs {
             Item item = new Item();
             for (String key : attribute.getChildren().keySet()) {
                 if (key.contains(".")) {
-                    if(key.split("\\.")[0] == "descriptor" && key.split("\\.")[1] == "name") {
+                    if(key.equals("descriptor.name")) {
                         Descriptor descriptor = new Descriptor();
                         descriptor.setName((String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
                         item.setDescriptor(descriptor);
@@ -143,7 +143,6 @@ public class SyncJobs {
             RestApi restApi = readRestApiJson("/restApi.json");
             String result = getRecordsWithoutKey(restApi.getUrl(), restApi.getMethod());
             addCatalogDescriptor(msg, restApi.getCatalogDescriptor());
-            List<Item> items = new ArrayList<>();
             fetchAllParams(msg, restApi, result);
 
         }catch (IOException e) {
