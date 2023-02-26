@@ -2,6 +2,8 @@ package com.beehyv.dsep.api;
 
 import com.beehyv.dsep.model.SearchPost200Response;
 import com.beehyv.dsep.model.StatusPostRequest;
+import com.beehyv.dsep.service.fulfillment.StatusService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,16 +35,17 @@ public interface StatusApiDelegate {
      * @see StatusApi#statusPost
      */
     default ResponseEntity<SearchPost200Response> statusPost(StatusPostRequest statusPostRequest) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return  ResponseEntity.ok(StatusService.getStatus(statusPostRequest));
+        // getRequest().ifPresent(request -> {
+        //     for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+        //         if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+        //             String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
+        //             ApiUtil.setExampleResponse(request, "application/json", exampleString);
+        //             break;
+        //         }
+        //     }
+        // });
+        // return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 

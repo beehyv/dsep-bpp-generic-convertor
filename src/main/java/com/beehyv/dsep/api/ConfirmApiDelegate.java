@@ -14,6 +14,7 @@ import com.beehyv.dsep.model.SearchPost200ResponseMessage;
 import com.beehyv.dsep.model.SelectPostRequest;
 import com.beehyv.dsep.util.PostApi;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -72,6 +73,8 @@ public interface ConfirmApiDelegate {
     public default String createPostRequest(Context context, Order order) throws JsonProcessingException {
         JSONObject result = new JSONObject();
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
         String contextJSON = objectMapper.writeValueAsString(context);
         JSONObject orderJSON = new JSONObject();
         JSONObject itemJSON = new JSONObject();
@@ -90,7 +93,7 @@ public interface ConfirmApiDelegate {
         orderJSON.put("id" ,order.getId());
         orderJSON.put("items" ,itemsArray);
         orderJSON.put("fulfillment" ,fulfilmentJSON);
-        result.put("context", contextJSON);
+        result.put("context", new JSONObject(contextJSON));
         result.put("order", orderJSON);
         return result.toString();
     }

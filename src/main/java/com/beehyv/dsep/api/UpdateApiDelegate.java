@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import com.beehyv.dsep.service.fulfillment.UpdateService;
 
 import java.util.List;
 import java.util.Map;
@@ -33,16 +34,17 @@ public interface UpdateApiDelegate {
      * @see UpdateApi#updatePost
      */
     default ResponseEntity<SearchPost200Response> updatePost(UpdatePostRequest updatePostRequest) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return  ResponseEntity.ok(UpdateService.updateService(updatePostRequest));
+        // getRequest().ifPresent(request -> {
+        //     for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+        //         if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+        //             String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
+        //             ApiUtil.setExampleResponse(request, "application/json", exampleString);
+        //             break;
+        //         }
+        //     }
+        // });
+        // return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 

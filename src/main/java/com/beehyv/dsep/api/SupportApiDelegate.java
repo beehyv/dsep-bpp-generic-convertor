@@ -2,6 +2,8 @@ package com.beehyv.dsep.api;
 
 import com.beehyv.dsep.model.SearchPost200Response;
 import com.beehyv.dsep.model.SupportPostRequest;
+import com.beehyv.dsep.service.postfulfillment.SupportService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,16 +35,17 @@ public interface SupportApiDelegate {
      * @see SupportApi#supportPost
      */
     default ResponseEntity<SearchPost200Response> supportPost(SupportPostRequest supportPostRequest) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return  ResponseEntity.ok(SupportService.getSupport(supportPostRequest));
+        // getRequest().ifPresent(request -> {
+        //     for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+        //         if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+        //             String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
+        //             ApiUtil.setExampleResponse(request, "application/json", exampleString);
+        //             break;
+        //         }
+        //     }
+        // });
+        // return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 

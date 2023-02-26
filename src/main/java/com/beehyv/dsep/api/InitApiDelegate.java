@@ -17,6 +17,7 @@ import com.beehyv.dsep.model.Ack.StatusEnum;
 
 import com.beehyv.dsep.util.PostApi;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 
@@ -76,6 +77,8 @@ public interface InitApiDelegate {
     public default String createPostRequest(Context context, Order order) throws JsonProcessingException {
         JSONObject result = new JSONObject();
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        objectMapper.findAndRegisterModules();
         String contextJSON = objectMapper.writeValueAsString(context);
         JSONObject orderJSON = new JSONObject();
         JSONObject itemJSON = new JSONObject();
@@ -94,7 +97,7 @@ public interface InitApiDelegate {
         orderJSON.put("id" ,order.getId());
         orderJSON.put("items" ,itemsArray);
         orderJSON.put("fulfillment" ,fulfilmentJSON);
-        result.put("context", contextJSON);
+        result.put("context", new JSONObject(contextJSON));
         result.put("order", orderJSON);
         return result.toString();
     }

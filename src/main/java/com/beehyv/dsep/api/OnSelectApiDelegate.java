@@ -2,6 +2,8 @@ package com.beehyv.dsep.api;
 
 import com.beehyv.dsep.model.OnSelectPostRequest;
 import com.beehyv.dsep.model.SearchPost200Response;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.annotation.Generated;
 
 /**
@@ -24,6 +29,7 @@ public interface OnSelectApiDelegate {
         return Optional.empty();
     }
 
+    public static final Logger LOGGER = LogManager.getLogger(OnSelectApiDelegate.class.getName());
     /**
      * POST /on_select
      * Send draft order object with quoted price for selected items
@@ -33,7 +39,7 @@ public interface OnSelectApiDelegate {
      * @see OnSelectApi#onSelectPost
      */
     default ResponseEntity<SearchPost200Response> onSelectPost(OnSelectPostRequest onSelectPostRequest) {
-        System.out.println("Recieved on select request");
+        LOGGER.info("Recieved on select request");
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
