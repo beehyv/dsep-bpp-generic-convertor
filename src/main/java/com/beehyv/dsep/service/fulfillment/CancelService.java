@@ -13,6 +13,10 @@ import com.beehyv.dsep.util.PostApi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class CancelService {
     public static SearchPost200Response cancelReq(CancelPostRequest request ) {
 
@@ -42,7 +46,8 @@ public class CancelService {
 
     }
 
-    public static String createPostRequest(Context context, Integer orderId) throws JsonProcessingException {
+    public static String createPostRequest(Context context, Integer orderId) throws JsonProcessingException, URISyntaxException {
+        context.setBapUri(new URI(context.getBapUri().toString()+"/on_cancel"));
         JSONObject result = new JSONObject();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);

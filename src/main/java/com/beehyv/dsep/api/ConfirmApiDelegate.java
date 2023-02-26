@@ -24,6 +24,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -70,7 +72,8 @@ public interface ConfirmApiDelegate {
         return  ResponseEntity.ok(resp);
     }
 
-    public default String createPostRequest(Context context, Order order) throws JsonProcessingException {
+    public default String createPostRequest(Context context, Order order) throws JsonProcessingException, URISyntaxException {
+        context.setBapUri(new URI(context.getBapUri().toString()+"/on_confirm"));
         JSONObject result = new JSONObject();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();

@@ -19,6 +19,10 @@ import com.beehyv.dsep.util.PostApi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class TrackService {
     public static SearchPost200Response trackService(TrackPostRequest request){
 
@@ -48,7 +52,8 @@ public class TrackService {
 
    }
 
-   public static String createPostRequest(Context context, Integer orderId) throws JsonProcessingException {
+   public static String createPostRequest(Context context, Integer orderId) throws JsonProcessingException, URISyntaxException {
+       context.setBapUri(new URI(context.getBapUri().toString()+"/on_track"));
        JSONObject result = new JSONObject();
        ObjectMapper objectMapper = new ObjectMapper();
        objectMapper.findAndRegisterModules();

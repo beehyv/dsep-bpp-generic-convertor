@@ -30,6 +30,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Date;
 import java.time.LocalTime;
 import java.util.List;
@@ -79,7 +81,8 @@ public interface SelectApiDelegate {
         return  ResponseEntity.ok(resp);
     }
 
-    public default String createPostRequest(Context context, Order order) throws JsonProcessingException {
+    public default String createPostRequest(Context context, Order order) throws JsonProcessingException, URISyntaxException {
+        context.setBapUri(new URI(context.getBapUri().toString()+"/on_select"));
         JSONObject result = new JSONObject();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);

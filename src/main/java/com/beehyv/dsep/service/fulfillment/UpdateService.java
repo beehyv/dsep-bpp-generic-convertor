@@ -27,6 +27,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class UpdateService {
     public static SearchPost200Response updateService(UpdatePostRequest request ){
 
@@ -56,7 +59,8 @@ public class UpdateService {
  
     }
  
-    public static String createPostRequest(Context context, Order order) throws JsonProcessingException {
+    public static String createPostRequest(Context context, Order order) throws JsonProcessingException, URISyntaxException {
+        context.setBapUri(new URI(context.getBapUri().toString()+"/on_update"));
         JSONObject result = new JSONObject();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();

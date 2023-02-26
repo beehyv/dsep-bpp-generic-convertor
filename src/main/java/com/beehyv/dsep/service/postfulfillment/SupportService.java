@@ -21,6 +21,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class SupportService {
     public static SearchPost200Response getSupport(SupportPostRequest request ){
 
@@ -50,8 +53,8 @@ public class SupportService {
 
    }
 
-   public static String createPostRequest(Context context, String refId) throws JsonProcessingException {
-
+   public static String createPostRequest(Context context, String refId) throws JsonProcessingException, URISyntaxException {
+       context.setBapUri(new URI(context.getBapUri().toString()+"/on_support"));
        SupportPostRequest postRequest = new SupportPostRequest();
        postRequest.setContext(context);
 

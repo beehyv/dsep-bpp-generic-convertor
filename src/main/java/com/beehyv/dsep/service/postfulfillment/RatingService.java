@@ -14,6 +14,8 @@ import com.beehyv.dsep.model.Ack;
 import com.beehyv.dsep.model.SearchPost200Response;
 import com.beehyv.dsep.model.SearchPost200ResponseMessage;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -67,8 +69,8 @@ public class RatingService {
  
     }
  
-    public static String createPostRequest(Context context, Rating rating) throws JsonProcessingException {
-
+    public static String createPostRequest(Context context, Rating rating) throws JsonProcessingException, URISyntaxException {
+        context.setBapUri(new URI(context.getBapUri().toString()+"/on_rating"));
         RatingPostRequest postRequest = new RatingPostRequest();
         postRequest.setContext(context);
 

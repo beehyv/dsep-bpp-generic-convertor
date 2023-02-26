@@ -18,6 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class StatusService {
     
     public static SearchPost200Response getStatus(StatusPostRequest request ){
@@ -48,7 +51,9 @@ public class StatusService {
  
      }
  
-     public static String createPostRequest(Context context, Integer orderId) throws JsonProcessingException {
+     public static String createPostRequest(Context context, Integer orderId) throws JsonProcessingException, URISyntaxException {
+         context.setBapUri(new URI(context.getBapUri().toString()+"/on_status"));
+
          JSONObject result = new JSONObject();
          ObjectMapper objectMapper = new ObjectMapper();
          objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
