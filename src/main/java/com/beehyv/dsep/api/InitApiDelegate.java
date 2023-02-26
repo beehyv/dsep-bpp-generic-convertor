@@ -70,6 +70,7 @@ public interface InitApiDelegate {
             };
         }
         Async async = new Async();
+        async.run();
         Ack ack  = new Ack();
         ack.setStatus(Ack.StatusEnum.ACK);
         msg.setAck(ack);
