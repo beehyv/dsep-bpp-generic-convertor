@@ -1,5 +1,5 @@
 {
-  "url" : "https://hiring.beehyv.com/webservice/rest/server.php?wstoken=51f42032deaafab27a7750e76c940494&wsfunction=core_course_search_courses&moodlewsrestformat=json&criterianame=search&criteriavalue=a",
+  "url" : "https://hiring.beehyv.com/webservice/rest/server.php?wstoken=dummy&wsfunction=core_course_search_courses&moodlewsrestformat=json&criterianame=search&criteriavalue=a",
   "requestMethod" : "GET",
   "catalogDescriptor" : "Catalog for Beehyv Training Courses",
   "attributes" : [
