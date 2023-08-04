@@ -1,12 +1,9 @@
 package com.beehyv.dsep.util;
 
-import com.beehyv.dsep.model.Ack;
-import com.beehyv.dsep.model.Catalog;
-import com.beehyv.dsep.model.Descriptor;
 import com.beehyv.dsep.model.Error;
-import com.beehyv.dsep.model.Item;
-import com.beehyv.dsep.model.SearchPost200Response;
-import com.beehyv.dsep.model.SearchPost200ResponseMessage;
+import com.beehyv.dsep.model.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,14 +13,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.Map;
 
 
 public class SyncJobs {
@@ -41,7 +35,7 @@ public class SyncJobs {
             response.append(inputLine);
         }
         in.close();
-        System.out.println("Output of Post Request" +response.toString());
+        System.out.println("Output of Post Request" + response.toString());
 
         return response.toString();
     }
@@ -88,7 +82,6 @@ public class SyncJobs {
     }
 
 
-
     private static Descriptor createDescriptor(String descriptor_name) {
         Descriptor descriptor = new Descriptor();
         descriptor.setName(descriptor_name);
@@ -116,18 +109,21 @@ public class SyncJobs {
             Item item = new Item();
             for (String key : attribute.getChildren().keySet()) {
                 if (key.contains(".")) {
-                    if(key.equals("descriptor.name")) {
+                    if (key.equals("descriptor.name")) {
                         Descriptor descriptor = new Descriptor();
                         descriptor.setName((String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
                         item.setDescriptor(descriptor);
                     }
                 } else {
                     switch (key) {
-                        case "id" : item.setId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
-                             break;
-                        case "parent_item_id" : item.setParentItemId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
+                        case "id":
+                            item.setId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
                             break;
-                        case "category_id" : item.setCategoryId( String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
+                        case "parent_item_id":
+                            item.setParentItemId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
+                            break;
+                        case "category_id":
+                            item.setCategoryId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
                             break;
                     }
 
@@ -138,18 +134,26 @@ public class SyncJobs {
         return items;
     }
 
-    public static SearchPost200ResponseMessage getAllJobs(SearchPost200ResponseMessage msg)  {
+    public static SearchPost200ResponseMessage getAllJobs(SearchPost200ResponseMessage msg) {
         try {
             RestApi restApi = readRestApiJson("/restApi.json");
             String result = getRecordsWithoutKey(restApi.getUrl(), restApi.getMethod());
             addCatalogDescriptor(msg, restApi.getCatalogDescriptor());
-            fetchAllParams(msg, restApi, result);
+//            fetchAllParams(msg, restApi, result);
+            setItems(msg, result);
 
-        }catch (IOException e) {
-          Error error = new Error();
-          error.setMessage(e.getMessage());
+        } catch (IOException e) {
+            Error error = new Error();
+            error.setMessage(e.getMessage());
         }
         return msg;
+    }
+
+    private static void setItems(SearchPost200ResponseMessage msg, String result) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonResult = objectMapper.readValue(result, Map.class);
+        SearchPost200ResponseMessage newMsg = JoltUtil.getEntity("/moodleJoltSpec.json", SearchPost200ResponseMessage.class, jsonResult);
+        msg.setItems(newMsg.getItems());
     }
 
 
