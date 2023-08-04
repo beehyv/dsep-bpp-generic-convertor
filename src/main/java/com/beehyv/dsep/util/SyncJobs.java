@@ -52,8 +52,8 @@ public class SyncJobs {
         String method = (String) jsonObject.get("requestMethod");
         String catalogDescriptor = (String) jsonObject.get("catalogDescriptor");
 
-        JSONArray attributes = (JSONArray) jsonObject.get("attributes");
-        RestApi restApi = new RestApi(url, method, createAttributesMap(attributes));
+//        JSONArray attributes = (JSONArray) jsonObject.get("attributes");
+        RestApi restApi = new RestApi(url, method);
         restApi.setCatalogDescriptor(catalogDescriptor);
         return restApi;
     }
@@ -91,14 +91,14 @@ public class SyncJobs {
 
     private static void fetchAllParams(SearchPost200ResponseMessage msg, RestApi restApi, String result) {
         JSONObject resultant = new JSONObject(result);
-        for (String originalAttribute : restApi.getAttributes().keySet()) {
-            Attribute attribute = restApi.getAttributes().get(originalAttribute);
-            if (attribute.getType().equals("array") && originalAttribute.equals("items")) {
-                List<Item> itemList = new ArrayList<>();
-                itemList.addAll(createChildren(attribute, resultant));
-                msg.setItems(itemList);
-            }
-        }
+//        for (String originalAttribute : restApi.getAttributes().keySet()) {
+//            Attribute attribute = restApi.getAttributes().get(originalAttribute);
+//            if (attribute.getType().equals("array") && originalAttribute.equals("items")) {
+//                List<Item> itemList = new ArrayList<>();
+//                itemList.addAll(createChildren(attribute, resultant));
+//                msg.setItems(itemList);
+//            }
+//        }
     }
 
 
@@ -155,6 +155,5 @@ public class SyncJobs {
         SearchPost200ResponseMessage newMsg = JoltUtil.getEntity("/moodleJoltSpec.json", SearchPost200ResponseMessage.class, jsonResult);
         msg.setItems(newMsg.getItems());
     }
-
 
 }

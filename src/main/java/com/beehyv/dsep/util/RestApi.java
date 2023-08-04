@@ -9,12 +9,11 @@ public class RestApi {
     private String method;
     private String catalogDescriptor;
     private String providerDescriptor;
-    private LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
+//    private LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
 
-    public RestApi(String url, String method, LinkedHashMap<String, Attribute> attributes) {
+    public RestApi(String url, String method) {
         this.url = url;
         this.method = method;
-        this.attributes = attributes;
     }
 
     public String getUrl() {
@@ -25,9 +24,6 @@ public class RestApi {
         return method;
     }
 
-    public LinkedHashMap<String, Attribute> getAttributes() {
-        return attributes;
-    }
 
     public String getCatalogDescriptor() {
         return catalogDescriptor;
