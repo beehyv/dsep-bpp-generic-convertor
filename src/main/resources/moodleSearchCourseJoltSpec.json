@@ -1,0 +1,57 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "courses": {
+        "*": {
+          "id": "items[&1].id",
+          "fullname": "items[&1].descriptor.name",
+          "courseimage": "items[&1].descriptor.images[]",
+          "categoryid": "items[&1].category_id",
+          "summary": "items[&1].descriptor.long_desc"
+        }
+      }
+    }
+  },
+  {
+    "operation": "modify-default-beta",
+    "spec": {
+      "items": {
+        "*": {
+          "parent_item_id": "@(1,id)"
+        }
+      }
+    }
+  },
+  {
+    "operation": "default",
+    "spec": {
+      "items[]": {
+        "*": {
+          "parent_item_id": null,
+          "descriptor": {
+            "3dRender": null,
+            "code": null,
+            "symbol": null,
+            "short_desc": null,
+            "long_desc": null,
+            "images": null,
+            "audio": null,
+            "3d_render": null
+          },
+          "price": null,
+          "fulfillment_id": null,
+          "rating": null,
+          "location_id": null,
+          "time": null,
+          "rateable": null,
+          "matched": null,
+          "related": null,
+          "recommended": null,
+          "tags": null,
+          "value": null
+        }
+      }
+    }
+  }
+]

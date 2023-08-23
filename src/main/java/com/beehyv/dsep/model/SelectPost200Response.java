@@ -10,20 +10,23 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
- * SelectPostRequest
+ * SelectPost200Response
  */
 
-@JsonTypeName("_select_post_request")
+@JsonTypeName("_select_post_200_response")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-02-25T15:22:03.145011300+05:30[Asia/Calcutta]")
-public class SelectPostRequest {
+public class SelectPost200Response {
 
   @JsonProperty("context")
   private Context context;
 
   @JsonProperty("message")
-  private SelectPostRequestMessage message;
+  private OnSelectPostRequestMessage message;
 
-  public SelectPostRequest context(Context context) {
+  @JsonProperty("error")
+  private Error error;
+
+  public SelectPost200Response context(Context context) {
     this.context = context;
     return this;
   }
@@ -42,7 +45,7 @@ public class SelectPostRequest {
     this.context = context;
   }
 
-  public SelectPostRequest message(SelectPostRequestMessage message) {
+  public SelectPost200Response message(OnSelectPostRequestMessage message) {
     this.message = message;
     return this;
   }
@@ -51,14 +54,33 @@ public class SelectPostRequest {
    * Get message
    * @return message
   */
-  @NotNull @Valid 
-  @Schema(name = "message", required = true)
-  public SelectPostRequestMessage getMessage() {
+  @Valid 
+  @Schema(name = "message", required = false)
+  public OnSelectPostRequestMessage getMessage() {
     return message;
   }
 
-  public void setMessage(SelectPostRequestMessage message) {
+  public void setMessage(OnSelectPostRequestMessage message) {
     this.message = message;
+  }
+
+  public SelectPost200Response error(Error error) {
+    this.error = error;
+    return this;
+  }
+
+  /**
+   * Get error
+   * @return error
+  */
+  @Valid 
+  @Schema(name = "error", required = false)
+  public Error getError() {
+    return error;
+  }
+
+  public void setError(Error error) {
+    this.error = error;
   }
 
   @Override
@@ -69,22 +91,24 @@ public class SelectPostRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SelectPostRequest selectPostRequest = (SelectPostRequest) o;
-    return Objects.equals(this.context, selectPostRequest.context) &&
-        Objects.equals(this.message, selectPostRequest.message);
+    SelectPost200Response onSelectPostRequest = (SelectPost200Response) o;
+    return Objects.equals(this.context, onSelectPostRequest.context) &&
+        Objects.equals(this.message, onSelectPostRequest.message) &&
+        Objects.equals(this.error, onSelectPostRequest.error);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(context, message);
+    return Objects.hash(context, message, error);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SelectPostRequest {\n");
+    sb.append("class OnSelectPostRequest {\n");
     sb.append("    context: ").append(toIndentedString(context)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
+    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("}");
     return sb.toString();
   }

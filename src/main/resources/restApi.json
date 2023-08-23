@@ -1,5 +1,12 @@
 {
-  "url": "https://hiring.beehyv.com/webservice/rest/server.php?wstoken=dummy&wsfunction=core_course_search_courses&moodlewsrestformat=json&criterianame=search&criteriavalue=a",
-  "requestMethod": "GET",
-  "catalogDescriptor": "Catalog for Beehyv Training Courses"
+  "search": {
+    "url": "https://sandbox.moodledemo.net/webservice/rest/server.php?wstoken=30a1d2e086eff701744330772aca4dbc&wsfunction=core_course_search_courses&moodlewsrestformat=json&criterianame=search&criteriavalue=",
+    "requestMethod": "GET",
+    "catalogDescriptor": "Catalog for Beehyv Training Courses"
+  },
+  "select": {
+    "url": "https://sandbox.moodledemo.net/webservice/rest/server.php?wstoken=30a1d2e086eff701744330772aca4dbc&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json",
+    "requestMethod": "GET",
+    "catalogDescriptor": "Selected course details"
+  }
 }

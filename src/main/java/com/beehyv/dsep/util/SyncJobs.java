@@ -44,15 +44,16 @@ public class SyncJobs {
         return "{\"total\":16,\"jobs\":[{\"id\":91,\"fullname\":\"English and Aptitude Test\",\"displayname\":\"English and Aptitude Test\",\"shortname\":\"English and Aptitude Test\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10002,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":90,\"fullname\":\"US Placement Test\",\"displayname\":\"US Placement Test\",\"shortname\":\"US PT\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10003,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":89,\"fullname\":\"Placement Test IIIT Kancheepuram\",\"displayname\":\"Placement Test IIIT Kancheepuram\",\"shortname\":\"PT IIIT Kancheepuram\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10004,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[{\"id\":4653,\"fullname\":\"Ankit Bichar\"},{\"id\":4654,\"fullname\":\"Rajat g\"},{\"id\":4652,\"fullname\":\"Akash Jannu\"},{\"id\":4656,\"fullname\":\"Sai Krishna\"},{\"id\":4655,\"fullname\":\"Rajnish Kumar\"},{\"id\":4657,\"fullname\":\"Suresh Soren\"}],\"enrollmentmethods\":[\"manual\"]},{\"id\":88,\"fullname\":\"Placement Test IIIT Sricity\",\"displayname\":\"Placement Test IIIT Sricity\",\"shortname\":\"PT IIIT Sricity\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10005,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[{\"id\":4653,\"fullname\":\"Ankit Bichar\"},{\"id\":4654,\"fullname\":\"Rajat g\"},{\"id\":4652,\"fullname\":\"Akash Jannu\"},{\"id\":4656,\"fullname\":\"Sai Krishna\"},{\"id\":4655,\"fullname\":\"Rajnish Kumar\"},{\"id\":4657,\"fullname\":\"Suresh Soren\"}],\"enrollmentmethods\":[\"manual\"]},{\"id\":87,\"fullname\":\"Placement Test IIT Bhubaneswar 2022\",\"displayname\":\"Placement Test IIT Bhubaneswar 2022\",\"shortname\":\"PT IIT Bhubaneswar 2022\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10006,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":86,\"fullname\":\"Internal Aptitude Test\",\"displayname\":\"Internal Aptitude Test\",\"shortname\":\"Internal Aptitude Test\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10007,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":52,\"fullname\":\"ANGULAR SCREENING TEST\",\"displayname\":\"ANGULAR SCREENING TEST\",\"shortname\":\"ANGULAR SCREENING TEST\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10029,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":56,\"fullname\":\"React Screening Test\",\"displayname\":\"React Screening Test\",\"shortname\":\"React Screening Test\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10030,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":62,\"fullname\":\"Accounting Recruitment\",\"displayname\":\"Accounting Recruitment\",\"shortname\":\"Accounting Recruitment\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10036,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":59,\"fullname\":\"Sr QA TEST [Old]\",\"displayname\":\"Sr QA TEST [Old]\",\"shortname\":\"SR QA TEST [Old]\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10037,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":58,\"fullname\":\"QA TEST\",\"displayname\":\"QA TEST\",\"shortname\":\"QA TEST\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10038,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":57,\"fullname\":\" Examus Ind Integration Test\",\"displayname\":\" Examus Ind Integration Test\",\"shortname\":\"E I S IT\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10040,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":49,\"fullname\":\"Angular Test\",\"displayname\":\"Angular Test\",\"shortname\":\"Angular Test\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10041,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":48,\"fullname\":\"Java Test\",\"displayname\":\"Java Test\",\"shortname\":\"Java Test\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10042,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":44,\"fullname\":\"Accounting Recruitment [OLD]\",\"displayname\":\"Accounting Recruitment [OLD]\",\"shortname\":\"A RT \",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10046,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":50,\"fullname\":\"React Test\",\"displayname\":\"React Test\",\"shortname\":\"React Test\",\"categoryid\":3,\"categoryname\":\"Recruitment 2022\",\"sortorder\":10047,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"contacts\":[],\"enrollmentmethods\":[\"manual\"]}],\"warnings\":[]}";
     }
 
-    private static RestApi readRestApiJson(String path) throws IOException {
+    private static RestApi readRestApiJson(String path, String key) throws IOException {
         InputStream inputStream = SyncJobs.class.getResourceAsStream(path);
         String jsonString = IOUtils.toString(inputStream, "UTF-8");
         JSONObject jsonObject = new JSONObject(jsonString);
-        String url = (String) jsonObject.get("url");
-        String method = (String) jsonObject.get("requestMethod");
-        String catalogDescriptor = (String) jsonObject.get("catalogDescriptor");
+        JSONObject apiJson = jsonObject.getJSONObject(key);
 
-//        JSONArray attributes = (JSONArray) jsonObject.get("attributes");
+        String url = (String) apiJson.get("url");
+        String method = (String) apiJson.get("requestMethod");
+        String catalogDescriptor = (String) apiJson.get("catalogDescriptor");
+
         RestApi restApi = new RestApi(url, method);
         restApi.setCatalogDescriptor(catalogDescriptor);
         return restApi;
@@ -136,8 +137,8 @@ public class SyncJobs {
 
     public static SearchPost200ResponseMessage getAllJobs(SearchPost200ResponseMessage msg) {
         try {
-            RestApi restApi = readRestApiJson("/restApi.json");
-            String result = getRecordsWithoutKey(restApi.getUrl(), restApi.getMethod());
+            RestApi restApi = readRestApiJson("/restApi.json", "search");
+            String result = getRecords(restApi.getUrl(), restApi.getMethod());
             addCatalogDescriptor(msg, restApi.getCatalogDescriptor());
 //            fetchAllParams(msg, restApi, result);
             setItems(msg, result);
@@ -152,8 +153,22 @@ public class SyncJobs {
     private static void setItems(SearchPost200ResponseMessage msg, String result) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> jsonResult = objectMapper.readValue(result, Map.class);
-        SearchPost200ResponseMessage newMsg = JoltUtil.getEntity("/moodleJoltSpec.json", SearchPost200ResponseMessage.class, jsonResult);
+        SearchPost200ResponseMessage newMsg = JoltUtil.getEntity("/moodleSearchCourseJoltSpec.json", SearchPost200ResponseMessage.class, jsonResult);
         msg.setItems(newMsg.getItems());
     }
 
+    public static SearchPost200ResponseMessage getSelectedCourse(SearchPost200ResponseMessage msg) {
+        try {
+            RestApi restApi = readRestApiJson("/restApi.json", "search");
+            String result = getRecords(restApi.getUrl(), restApi.getMethod());
+            addCatalogDescriptor(msg, restApi.getCatalogDescriptor());
+//            fetchAllParams(msg, restApi, result);
+            setItems(msg, result);
+
+        } catch (IOException e) {
+            Error error = new Error();
+            error.setMessage(e.getMessage());
+        }
+        return msg;
+    }
 }
