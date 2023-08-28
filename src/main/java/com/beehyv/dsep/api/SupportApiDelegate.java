@@ -1,6 +1,8 @@
 package com.beehyv.dsep.api;
 
+import com.beehyv.dsep.model.Ack;
 import com.beehyv.dsep.model.SearchPost200Response;
+import com.beehyv.dsep.model.SearchPost200ResponseMessage;
 import com.beehyv.dsep.model.SupportPostRequest;
 import com.beehyv.dsep.service.postfulfillment.SupportService;
 
@@ -35,17 +37,16 @@ public interface SupportApiDelegate {
      * @see SupportApi#supportPost
      */
     default ResponseEntity<SearchPost200Response> supportPost(SupportPostRequest supportPostRequest) {
-        return  ResponseEntity.ok(SupportService.getSupport(supportPostRequest));
-        // getRequest().ifPresent(request -> {
-        //     for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-        //         if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-        //             String exampleString = "{ \"message\" : { \"ack\" : { \"status\" : \"ACK\" } }, \"error\" : { \"path\" : \"path\", \"code\" : \"code\", \"type\" : \"CONTEXT-ERROR\", \"message\" : \"message\" } }";
-        //             ApiUtil.setExampleResponse(request, "application/json", exampleString);
-        //             break;
-        //         }
-        //     }
-        // });
-        // return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        SearchPost200Response res = new SearchPost200Response();
+        SearchPost200ResponseMessage msg = new SearchPost200ResponseMessage();
+        Ack ack = new Ack();
+        ack.setStatus(Ack.StatusEnum.ACK);
+        msg.setAck(ack);
+        msg.setConfirmation("Please contact hrmanager@beehyv.com");
+        res.setMessage(msg);
+        res.setMessage(msg);
+
+        return  ResponseEntity.ok(res);
 
     }
 

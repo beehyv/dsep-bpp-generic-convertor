@@ -5,7 +5,6 @@ import com.beehyv.dsep.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -14,9 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.net.URLEncoder;
 import java.util.Map;
 
 
@@ -52,27 +49,24 @@ public class SyncJobs {
 
         String url = (String) apiJson.get("url");
         String method = (String) apiJson.get("requestMethod");
-        String catalogDescriptor = (String) apiJson.get("catalogDescriptor");
-
         RestApi restApi = new RestApi(url, method);
-        restApi.setCatalogDescriptor(catalogDescriptor);
-        return restApi;
-    }
-
-    private static LinkedHashMap<String, Attribute> createAttributesMap(JSONArray attributes) {
-        LinkedHashMap<String, Attribute> attributesMap = new LinkedHashMap<>();
-        LinkedHashMap<String, Attribute> childrensMap = new LinkedHashMap<>();
-        for (Object attribute : attributes) {
-            String becknField = (String) ((JSONObject) attribute).get("becknField");
-            String apiField = (String) ((JSONObject) attribute).get("apiField");
-            String type = (String) ((JSONObject) attribute).get("type");
-            if (((JSONObject) attribute).has("children")) {
-                JSONArray children = (JSONArray) ((JSONObject) attribute).get("children");
-                childrensMap = createAttributesMap(children);
-            }
-            attributesMap.put(becknField, new Attribute(apiField, type, childrensMap));
+        if (apiJson.has("catalogDescriptor")) {
+            String catalogDescriptor = (String) apiJson.get("catalogDescriptor");
+            restApi.setCatalogDescriptor(catalogDescriptor);
         }
-        return attributesMap;
+        if (apiJson.has("wstoken")) {
+            String wsToken = (String) apiJson.get("wstoken");
+            restApi.setWsToken(wsToken);
+        }
+        if (apiJson.has("wsfunction")) {
+            String wsFunction = (String) apiJson.get("wsfunction");
+            restApi.setWsFunction(wsFunction);
+        }
+        if (apiJson.has("moodlewsrestformat")) {
+            String moodleWsRestFormat = (String) apiJson.get("moodlewsrestformat");
+            restApi.setMoodleWsRestFormat(moodleWsRestFormat);
+        }
+        return restApi;
     }
 
     public static Catalog addCatalogDescriptor(SearchPost200ResponseMessage msg, String descriptor_name) {
@@ -89,58 +83,11 @@ public class SyncJobs {
         return descriptor;
     }
 
-
-    private static void fetchAllParams(SearchPost200ResponseMessage msg, RestApi restApi, String result) {
-        JSONObject resultant = new JSONObject(result);
-//        for (String originalAttribute : restApi.getAttributes().keySet()) {
-//            Attribute attribute = restApi.getAttributes().get(originalAttribute);
-//            if (attribute.getType().equals("array") && originalAttribute.equals("items")) {
-//                List<Item> itemList = new ArrayList<>();
-//                itemList.addAll(createChildren(attribute, resultant));
-//                msg.setItems(itemList);
-//            }
-//        }
-    }
-
-
-    private static List<Item> createChildren(Attribute attribute, JSONObject resultant) {
-        List<Item> items = new ArrayList<>();
-        JSONArray childrenArray = (JSONArray) resultant.get(attribute.getField());
-        for (Object child : childrenArray) {
-            Item item = new Item();
-            for (String key : attribute.getChildren().keySet()) {
-                if (key.contains(".")) {
-                    if (key.equals("descriptor.name")) {
-                        Descriptor descriptor = new Descriptor();
-                        descriptor.setName((String) ((JSONObject) child).get(attribute.getChildren().get(key).getField()));
-                        item.setDescriptor(descriptor);
-                    }
-                } else {
-                    switch (key) {
-                        case "id":
-                            item.setId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
-                            break;
-                        case "parent_item_id":
-                            item.setParentItemId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
-                            break;
-                        case "category_id":
-                            item.setCategoryId(String.valueOf(((JSONObject) child).get(attribute.getChildren().get(key).getField())));
-                            break;
-                    }
-
-                }
-            }
-            items.add(item);
-        }
-        return items;
-    }
-
     public static SearchPost200ResponseMessage getAllJobs(SearchPost200ResponseMessage msg) {
         try {
             RestApi restApi = readRestApiJson("/restApi.json", "search");
             String result = getRecords(restApi.getUrl(), restApi.getMethod());
             addCatalogDescriptor(msg, restApi.getCatalogDescriptor());
-//            fetchAllParams(msg, restApi, result);
             setItems(msg, result);
 
         } catch (IOException e) {
@@ -157,18 +104,140 @@ public class SyncJobs {
         msg.setItems(newMsg.getItems());
     }
 
-    public static SearchPost200ResponseMessage getSelectedCourse(SearchPost200ResponseMessage msg) {
+    public static SearchPost200ResponseMessage getSelectedCourse(SelectPostRequest request) {
+        SearchPost200ResponseMessage msg = null;
         try {
-            RestApi restApi = readRestApiJson("/restApi.json", "search");
-            String result = getRecords(restApi.getUrl(), restApi.getMethod());
-            addCatalogDescriptor(msg, restApi.getCatalogDescriptor());
-//            fetchAllParams(msg, restApi, result);
+            RestApi restApi = readRestApiJson("/restApi.json", "select");
+            String url = restApi.getUrl() + "&field=id&value=" + request.getMessage().getOrder().getProvider().getItems().get(0).getId();
+            String result = getRecords(url, restApi.getMethod());
+            msg = new SearchPost200ResponseMessage();
             setItems(msg, result);
+        } catch (IOException e) {
+            Error error = new Error();
+            error.setMessage(e.getMessage());
+        }
+        return msg;
+    }
+
+    public static SearchPost200ResponseMessage selfEnrolCourse(SelectPostRequest request) {
+        SearchPost200ResponseMessage msg = null;
+        try {
+            RestApi restApi = readRestApiJson("/restApi.json", "confirm");
+            if (request.getMessage().getOrder().getProvider().getItems().size() == 1) {
+                String url = restApi.getUrl() + "&courseid=" + request.getMessage().getOrder().getProvider().getItems().get(0).getId();
+                String result = getRecords(url, restApi.getMethod());
+                msg = setEnrolmentStatus(result);
+            }
 
         } catch (IOException e) {
             Error error = new Error();
             error.setMessage(e.getMessage());
         }
         return msg;
+    }
+
+    private static SearchPost200ResponseMessage setEnrolmentStatus(String result) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonResult = objectMapper.readValue(result, Map.class);
+        SearchPost200ResponseMessage newMsg = JoltUtil.getEntity("/moodleSelfEnrolJoltSpec.json", SearchPost200ResponseMessage.class, jsonResult);
+        return newMsg;
+    }
+
+    public static SearchPost200ResponseMessage manualCourseEnrol(SelectPostRequestMessage request) {
+        SearchPost200ResponseMessage msg = new SearchPost200ResponseMessage();
+        try {
+            RestApi restApi = readRestApiJson("/restApi.json", "initConfirm");
+            String result = courseEnrolAction(restApi, request);
+            if (result.equals("null")) {
+                msg.setConfirmation("ENROLLED");
+            } else {
+                msg.setConfirmation("CANCELLED");
+            }
+        } catch (IOException e) {
+            Error error = new Error();
+            error.setMessage(e.getMessage());
+        }
+        return msg;
+    }
+
+    public static SearchPost200ResponseMessage manualCourseUnEnrol(CancelPostRequestMessage request) {
+        SearchPost200ResponseMessage msg = new SearchPost200ResponseMessage();
+        try {
+            RestApi restApi = readRestApiJson("/restApi.json", "cancel");
+            String result = courseUnEnrolAction(restApi, request);
+            if (result.equals("null")) {
+                msg.setConfirmation("UNENROLLED");
+            } else {
+                msg.setConfirmation("CANCELLED");
+            }
+        } catch (IOException e) {
+            Error error = new Error();
+            error.setMessage(e.getMessage());
+        }
+        return msg;
+    }
+
+    public static String courseEnrolAction(RestApi restApi, SelectPostRequestMessage request) throws IOException {
+        Item item = request.getOrder().getProvider().getItems().get(0);
+
+        String roleId = item.getCategoryId();
+        String courseId = item.getParentItemId();
+        String userId = item.getId();
+        String data = "wstoken=" + URLEncoder.encode(restApi.getWsToken(), "UTF-8") +
+                "&wsfunction=" + URLEncoder.encode(restApi.getWsFunction(), "UTF-8") +
+                "&enrolments[0][userid]=" + URLEncoder.encode(userId, "UTF-8") +
+                "&enrolments[0][courseid]=" + URLEncoder.encode(courseId, "UTF-8") +
+                "&moodlewsrestformat=" + URLEncoder.encode(restApi.getMoodleWsRestFormat(), "UTF-8");
+        data = data + (roleId != null ? "&enrolments[0][roleid]=" + URLEncoder.encode(roleId, "UTF-8") : "");
+
+        URL urlObj = new URL(restApi.getUrl());
+        HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setDoOutput(true);
+
+        connection.getOutputStream().write(data.getBytes("UTF-8"));
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        in.close();
+        return response.toString();
+    }
+
+    public static String courseUnEnrolAction(RestApi restApi, CancelPostRequestMessage request) throws IOException {
+        String courseId = request.getOrderId().getId().toString();
+        String userId = request.getCancellationReasonId().getId().toString();
+        String data = "wstoken=" + URLEncoder.encode(restApi.getWsToken(), "UTF-8") +
+                "&wsfunction=" + URLEncoder.encode(restApi.getWsFunction(), "UTF-8") +
+                "&enrolments[0][userid]=" + URLEncoder.encode(userId, "UTF-8") +
+                "&enrolments[0][courseid]=" + URLEncoder.encode(courseId, "UTF-8") +
+                "&moodlewsrestformat=" + URLEncoder.encode(restApi.getMoodleWsRestFormat(), "UTF-8");
+
+        URL urlObj = new URL(restApi.getUrl());
+        HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setDoOutput(true);
+
+        connection.getOutputStream().write(data.getBytes("UTF-8"));
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        in.close();
+        return response.toString();
     }
 }

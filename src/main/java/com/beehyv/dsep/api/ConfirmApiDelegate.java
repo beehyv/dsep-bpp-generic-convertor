@@ -1,33 +1,24 @@
 package com.beehyv.dsep.api;
 
 import com.beehyv.dsep.model.Ack;
-import com.beehyv.dsep.model.Catalog;
-import com.beehyv.dsep.model.Category;
 import com.beehyv.dsep.model.Contact;
 import com.beehyv.dsep.model.Context;
-import com.beehyv.dsep.model.Descriptor;
 import com.beehyv.dsep.model.Fulfillment;
-import com.beehyv.dsep.model.Item;
 import com.beehyv.dsep.model.Order;
 import com.beehyv.dsep.model.SearchPost200Response;
 import com.beehyv.dsep.model.SearchPost200ResponseMessage;
 import com.beehyv.dsep.model.SelectPostRequest;
-import com.beehyv.dsep.util.PostApi;
+import com.beehyv.dsep.util.SyncJobs;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Generated;
@@ -51,28 +42,28 @@ public interface ConfirmApiDelegate {
      * @return Acknowledgement of message received (status code 200)
      * @see ConfirmApi#confirmPost
      */
-    default ResponseEntity<SearchPost200Response> confirmPost(SelectPostRequest selectPostRequest) {
-        SearchPost200Response resp = new SearchPost200Response();
-        SearchPost200ResponseMessage msg  = new SearchPost200ResponseMessage();
-        //TODO this will be done through Kafka
-        class Async  implements Runnable {
-            @Override
-            public void run() {
-                try {
-                    PostApi.post(createPostRequest(selectPostRequest.getContext(), selectPostRequest.getMessage().getOrder()), selectPostRequest.getContext().getBapUri().toString());
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            };
-        }
-        Async async = new Async();
-        async.run();
-        Ack ack  = new Ack();
-        ack.setStatus(Ack.StatusEnum.ACK);
-        msg.setAck(ack);
-        resp.setMessage(msg);
-        return  ResponseEntity.ok(resp);
-    }
+//    default ResponseEntity<SearchPost200Response> confirmPost(SelectPostRequest selectPostRequest) {
+//        SearchPost200Response resp = new SearchPost200Response();
+//        SearchPost200ResponseMessage msg  = new SearchPost200ResponseMessage();
+//        //TODO this will be done through Kafka
+//        class Async  implements Runnable {
+//            @Override
+//            public void run() {
+//                try {
+//                    PostApi.post(createPostRequest(selectPostRequest.getContext(), selectPostRequest.getMessage().getOrder()), selectPostRequest.getContext().getBapUri().toString());
+//                } catch (Exception e) {
+//                    System.out.println(e.getMessage());
+//                }
+//            };
+//        }
+//        Async async = new Async();
+//        async.run();
+//        Ack ack  = new Ack();
+//        ack.setStatus(Ack.StatusEnum.ACK);
+//        msg.setAck(ack);
+//        resp.setMessage(msg);
+//        return  ResponseEntity.ok(resp);
+//    }
 
     public default String createPostRequest(Context context, Order order) throws JsonProcessingException, URISyntaxException {
         context.setBapUri(new URI(context.getBapUri().toString()+"/on_confirm"));
@@ -101,6 +92,21 @@ public interface ConfirmApiDelegate {
         result.put("context", new JSONObject(contextJSON));
         result.put("order", orderJSON);
         return result.toString();
+    }
+
+    default ResponseEntity<SearchPost200Response> confirmPost(SelectPostRequest selectPostRequest) {
+        SearchPost200Response resp = new SearchPost200Response();
+        SearchPost200ResponseMessage msg  = SyncJobs.selfEnrolCourse(selectPostRequest);
+        Ack ack  = new Ack();
+        if (msg.getConfirmation()==null) {
+            ack.setStatus(Ack.StatusEnum.NACK);
+        } else {
+            ack.setStatus(Ack.StatusEnum.ACK);
+        }
+        msg.setAck(ack);
+
+        resp.setMessage(msg);
+        return  ResponseEntity.ok(resp);
     }
 
 

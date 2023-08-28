@@ -1,0 +1,23 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "status": {
+        "true": {
+          "#ENROLLED": "confirmation"
+        },
+        "*": {
+          "#CANCELLED": "confirmation"
+        }
+      }
+    }
+  },
+  {
+    "operation": "default",
+    "spec": {
+      "catalog": null,
+      "items": null,
+      "fulfillment": null
+    }
+  }
+]

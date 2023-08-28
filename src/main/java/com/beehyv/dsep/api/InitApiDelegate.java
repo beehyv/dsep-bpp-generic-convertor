@@ -16,6 +16,7 @@ import com.beehyv.dsep.model.SelectPostRequest;
 import com.beehyv.dsep.model.Ack.StatusEnum;
 
 import com.beehyv.dsep.util.PostApi;
+import com.beehyv.dsep.util.SyncJobs;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,29 +57,29 @@ public interface InitApiDelegate {
      * @return Acknowledgement of message received (status code 200)
      * @see InitApi#initPost
      */
-    default ResponseEntity<SearchPost200Response> initPost(SelectPostRequest selectPostRequest) {
-        SearchPost200Response resp = new SearchPost200Response();
-        SearchPost200ResponseMessage msg  = new SearchPost200ResponseMessage();
-        class Async  implements Runnable {
-            @Override
-            public void run() {
-                try {
-                    PostApi.post(createPostRequest(selectPostRequest.getContext(), selectPostRequest.getMessage().getOrder()), selectPostRequest.getContext().getBapUri().toString());
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            };
-        }
-        Async async = new Async();
-        async.run();
-        Ack ack  = new Ack();
-        ack.setStatus(Ack.StatusEnum.ACK);
-        msg.setAck(ack);
-        resp.setMessage(msg);
-        return  ResponseEntity.ok(resp);
-    }
+//    default ResponseEntity<SearchPost200Response> initPost(SelectPostRequest selectPostRequest) {
+//        SearchPost200Response resp = new SearchPost200Response();
+//        SearchPost200ResponseMessage msg  = new SearchPost200ResponseMessage();
+//        class Async  implements Runnable {
+//            @Override
+//            public void run() {
+//                try {
+//                    PostApi.post(createPostRequest(selectPostRequest.getContext(), selectPostRequest.getMessage().getOrder()), selectPostRequest.getContext().getBapUri().toString());
+//                } catch (Exception e) {
+//                    System.out.println(e.getMessage());
+//                }
+//            };
+//        }
+//        Async async = new Async();
+//        async.run();
+//        Ack ack  = new Ack();
+//        ack.setStatus(Ack.StatusEnum.ACK);
+//        msg.setAck(ack);
+//        resp.setMessage(msg);
+//        return  ResponseEntity.ok(resp);
+//    }
     public default String createPostRequest(Context context, Order order) throws JsonProcessingException, URISyntaxException {
-        context.setBapUri(new URI(context.getBapUri().toString()+"/on_init"));
+        context.setBapUri(new URI(context.getBapUri().toString() + "/on_init"));
         JSONObject result = new JSONObject();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
@@ -98,13 +99,22 @@ public interface InitApiDelegate {
         fulfillment.setRateable(false);
         fulfillment.setTracking(false);
         String fulfilmentJSON = objectMapper.writeValueAsString(fulfillment);
-        orderJSON.put("id" ,order.getId());
-        orderJSON.put("items" ,itemsArray);
-        orderJSON.put("fulfillment" ,fulfilmentJSON);
+        orderJSON.put("id", order.getId());
+        orderJSON.put("items", itemsArray);
+        orderJSON.put("fulfillment", fulfilmentJSON);
         result.put("context", new JSONObject(contextJSON));
         result.put("order", orderJSON);
         return result.toString();
     }
 
+    default ResponseEntity<SearchPost200Response> initPost(SelectPostRequest selectPostRequest) {
+        SearchPost200Response resp = new SearchPost200Response();
+        SearchPost200ResponseMessage msg = SyncJobs.manualCourseEnrol(selectPostRequest.getMessage());
+        Ack ack = new Ack();
+        ack.setStatus(Ack.StatusEnum.ACK);
+        msg.setAck(ack);
+        resp.setMessage(msg);
+        return ResponseEntity.ok(resp);
+    }
 
 }
