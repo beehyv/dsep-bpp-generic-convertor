@@ -27,6 +27,9 @@ public class OnSelectPostRequestMessage {
   @JsonProperty("order")
   private OnSelectPostRequestMessageOrder order;
 
+  @JsonProperty("parent_item_id")
+  private Integer parentItemId;
+
   public OnSelectPostRequestMessage order(OnSelectPostRequestMessageOrder order) {
     this.order = order;
     return this;

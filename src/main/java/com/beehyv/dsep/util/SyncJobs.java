@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 
@@ -110,14 +111,28 @@ public class SyncJobs {
         msg.setItems(newMsg.getItems());
     }
 
-    public static SearchPost200ResponseMessage getSelectedCourse(SelectPostRequest request) {
-        SearchPost200ResponseMessage msg = null;
+    private static void setCourseDetails(OnSelectPostRequestMessage msg, String courseDetails, String courseModules) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonCourseDetails = objectMapper.readValue(courseDetails, Map.class);
+        List<Map<String, Object>> jsonCourseModules = objectMapper.readValue(courseModules, List.class);
+        jsonCourseDetails.put("modules", jsonCourseModules.get(0).get("modules"));
+        OnSelectPostRequestMessage order = JoltUtil.getEntity("/moodleSelectCourseJoltSpec.json", OnSelectPostRequestMessage.class, jsonCourseDetails);
+        msg.setOrder(order.getOrder());
+    }
+
+    public static OnSelectPostRequestMessage getSelectedCourse(SelectPostRequest request) {
+        OnSelectPostRequestMessage msg = null;
         try {
-            RestApi restApi = readRestApiJson("/restApi.json", "select");
-            String url = restApi.getUrl() + "&field=id&value=" + request.getMessage().getOrder().getProvider().getItems().get(0).getId();
-            String result = getRecords(url, restApi.getMethod());
-            msg = new SearchPost200ResponseMessage();
-            setItems(msg, result);
+            RestApi selectCorseDetailsRestApi = readRestApiJson("/restApi.json", "select");
+            String courseDetailsUrl = selectCorseDetailsRestApi.getUrl() + "&field=id&value=" + request.getMessage().getOrder().getProvider().getItems().get(0).getId();
+            String courseDetails = getRecords(courseDetailsUrl, selectCorseDetailsRestApi.getMethod());
+
+            RestApi selectCourseModulesRestApi = readRestApiJson("/restApi.json", "selectModules");
+            String courseModulesUrl = selectCourseModulesRestApi.getUrl() + "&courseid=" + request.getMessage().getOrder().getProvider().getItems().get(0).getId();
+            String courseModules = getRecords(courseModulesUrl, selectCourseModulesRestApi.getMethod());
+
+            msg = new OnSelectPostRequestMessage();
+            setCourseDetails(msg, courseDetails, courseModules);
         } catch (IOException e) {
             Error error = new Error();
             error.setMessage(e.getMessage());

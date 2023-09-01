@@ -73,17 +73,9 @@ public interface SelectApiDelegate {
         return result.toString();
     }
 
-    default ResponseEntity<SearchPost200Response> selectPost(SelectPostRequest selectPostRequest) {
-        SearchPost200Response resp = new SearchPost200Response();
-        SearchPost200ResponseMessage msg = SyncJobs.getSelectedCourse(selectPostRequest);
-        Ack ack = new Ack();
-        if (msg != null) {
-            ack.setStatus(Ack.StatusEnum.ACK);
-        } else {
-            msg = new SearchPost200ResponseMessage();
-            ack.setStatus(Ack.StatusEnum.NACK);
-        }
-        msg.setAck(ack);
+    default ResponseEntity<OnSelectPostRequest> selectPost(SelectPostRequest selectPostRequest) {
+        OnSelectPostRequest resp = new OnSelectPostRequest();
+        OnSelectPostRequestMessage msg = SyncJobs.getSelectedCourse(selectPostRequest);
         resp.setMessage(msg);
         return ResponseEntity.ok(resp);
     }

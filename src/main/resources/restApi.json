@@ -8,6 +8,10 @@
     "url": "https://hiring.beehyv.com/webservice/rest/server.php?wstoken=9fcc245bf8f076eeae370a20cdefc6a2&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json",
     "requestMethod": "GET"
   },
+  "selectModules": {
+    "url": "https://hiring.beehyv.com/webservice/rest/server.php?wsfunction=core_course_get_contents&wstoken=9fcc245bf8f076eeae370a20cdefc6a2&moodlewsrestformat=json",
+    "requestMethod": "GET"
+  },
   "initConfirm": {
     "url": "https://hiring.beehyv.com/webservice/rest/server.php",
     "requestMethod": "GET",

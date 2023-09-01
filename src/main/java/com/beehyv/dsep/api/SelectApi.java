@@ -5,6 +5,7 @@
  */
 package com.beehyv.dsep.api;
 
+import com.beehyv.dsep.model.OnSelectPostRequest;
 import com.beehyv.dsep.model.SearchPost200Response;
 import com.beehyv.dsep.model.SelectPostRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,7 +64,7 @@ public interface SelectApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<SearchPost200Response> selectPost(
+    default ResponseEntity<OnSelectPostRequest> selectPost(
         @Parameter(name = "SelectPostRequest", description = "TODO") @Valid @RequestBody(required = false) SelectPostRequest selectPostRequest
     ) {
         return getDelegate().selectPost(selectPostRequest);

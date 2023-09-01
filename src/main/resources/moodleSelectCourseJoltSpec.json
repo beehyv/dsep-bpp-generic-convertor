@@ -1,0 +1,25 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "courses": {
+        "0": {
+          "id": "parent_item_id"
+        }
+      },
+      "modules": {
+        "*": {
+          "id": "order.items[&1].id",
+          "name": "order.items[&1].descriptor.name",
+          "description": "order.items[&1].descriptor.long_desc"
+        }
+      }
+    }
+  },
+  {
+    "operation": "default",
+    "spec": {
+      "parent_item_id": 0
+    }
+  }
+]
