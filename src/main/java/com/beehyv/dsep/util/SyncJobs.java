@@ -83,10 +83,16 @@ public class SyncJobs {
         return descriptor;
     }
 
-    public static SearchPost200ResponseMessage getAllJobs(SearchPost200ResponseMessage msg) {
+    public static SearchPost200ResponseMessage getAllJobs(SearchPostRequestMessage requestMsg) {
+        SearchPost200ResponseMessage msg = new SearchPost200ResponseMessage();
         try {
             RestApi restApi = readRestApiJson("/restApi.json", "search");
-            String result = getRecords(restApi.getUrl(), restApi.getMethod());
+            String url = restApi.getUrl();
+            if (requestMsg != null && requestMsg.getIntent() != null && requestMsg.getIntent().getDescriptor() != null) {
+
+                url = url + requestMsg.getIntent().getDescriptor().getName();
+            }
+            String result = getRecords(url, restApi.getMethod());
             addCatalogDescriptor(msg, restApi.getCatalogDescriptor());
             setItems(msg, result);
 
